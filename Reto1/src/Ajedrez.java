@@ -3,7 +3,8 @@ public class Ajedrez {
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[48;5;15m";
     public static final String ANSI_BROWN_BACKGROUND = "\u001B[48;5;94m";
-
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[101m";
     public static char[][] crearTablero() {
 
         char[][] tablero = new char [11][11];
@@ -60,12 +61,29 @@ public class Ajedrez {
                 else if(tablero[i][j]=='.'){
                     System.out.print(" " + "\u200B" + " ");
                 }
+                else if(tablero[i][j]=='-'){
+                    System.out.print(ANSI_GREEN_BACKGROUND + "\u200B" + "  " + ANSI_RESET);
+                }
+                else if(tablero[i][j]=='*'){
+                    System.out.print(ANSI_RED_BACKGROUND + "   " + ANSI_RESET);
+                }
                 else{
                     System.out.print(" " + tablero[i][j] + " ");
                 }
             }
             System.out.println(" ");
             nfila++;
+        }
+    }
+
+    public static void modificarTablero(char[][] tablero, int[][] posiciones, int posI, int posJ) {
+        tablero[posI][posJ] = '*';
+        for (int k = 0; k < posiciones.length; k++) {
+            int fila = posiciones[k][0];   // Obtiene la fila de la posición
+            int columna = posiciones[k][1]; // Obtiene la columna de la posición
+            if (fila > 0 && fila < tablero.length && columna > 0 && columna < tablero[fila].length) {
+                tablero[fila][columna] = '-'; // Sustituye el valor en la posición especificada
+            }
         }
     }
 
