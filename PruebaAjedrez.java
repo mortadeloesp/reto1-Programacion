@@ -14,20 +14,24 @@ public class PruebaAjedrez {
             case 'A':
                 prueba = miPieza.movimientoAlfil();
                 break;
+            case 'T':
+                prueba = miPieza.movimientoTorre();
+                break;
+            case 'P':
+                prueba = miPieza.movimientoPeon();
+                break;
+            case 'D':
+                prueba = miPieza.movimientoDama();
+                break;
+            case 'C':
+                prueba = miPieza.movimientoCaballo();
+                break;
         }
-
         char[][] codificado = codificar(prueba);
-        System.out.println("Tu pieza está en la posición " + codificarColumna(miPieza.getPosJ()) + codificarFila(miPieza.getPosI()));
+        System.out.println("Tu pieza está en la posición " + codificarColumnaInt(miPieza.getPosJ()) + codificarFilaInt(miPieza.getPosI()));
         Ajedrez.modificarTablero(tablero, prueba, miPieza.getPosI(), miPieza.getPosJ());
-        Ajedrez.imprimirTablero(tablero);
-        for (int i = 0; i < codificado.length; i++) {
-            for (int j = 0; j < codificado[i].length; j++) {
-                if (codificado[i][j] != 0) {
-                    System.out.print(codificado[i][j]);
-                }
-            }
-            System.out.println();
-        }
+        Ajedrez.imprimirTablero(tablero, miPieza.getTipo());
+        Ajedrez.imprimirMovimientos(codificado);
     }
         /*Scanner scan = new Scanner(System.in);
         System.out.println("Introduce la pieza (Torre (T), Alfil (A), Peón (P), Dama (D), Caballo (C), Rey (R)): ");
@@ -74,10 +78,10 @@ public class PruebaAjedrez {
                 int tonalidad = scan.nextInt();
                 scan.nextLine();
 
-                if (tonalidad == 0) {
+                if (tonalidad == 0) { //Blanco
                     nuevaPieza.setColor(false);
                     colorValido = true;
-                } else if (tonalidad == 1) {
+                } else if (tonalidad == 1) { //Negro
                     nuevaPieza.setColor(true);
                     colorValido = true;
                 } else {
@@ -98,9 +102,10 @@ public class PruebaAjedrez {
             String letraColumna = scan.next();
             if (letraColumna.length() != 1) {
                 System.out.println("Longitud errónea");
-            } else {
+            }
+            else {
                 char columna = Character.toUpperCase(letraColumna.charAt(0));
-                int columnaNumerica = codificarColumna(columna);
+                int columnaNumerica = codificarColumnaChar(columna);
                 if (columnaNumerica >= 1 && columnaNumerica <= 8) {
                     nuevaPieza.setPosJ(columnaNumerica);
                     columnaValida = true;
@@ -118,8 +123,14 @@ public class PruebaAjedrez {
                     System.out.println("Longitud errónea");
                 } else {
                     char fila = numeroFila.charAt(0);
-                    int filaNumerica = codificarFila(fila);
-                    if (filaNumerica >= 1 && filaNumerica <= 8) {
+                    int filaNumerica = codificarFilaChar(fila);
+                    if (nuevaPieza.getTipo()=='P' && nuevaPieza.isColor() && filaNumerica == 1){
+                        System.out.println("Posición errónea");
+                    }
+                    if (nuevaPieza.getTipo()=='P' && !nuevaPieza.isColor() && filaNumerica == 8){
+                        System.out.println("Posición errónea");
+                    }
+                    else if (filaNumerica >= 1 && filaNumerica <= 8) {
                         nuevaPieza.setPosI(filaNumerica);
                         filaValida = true;
                     } else {
@@ -133,70 +144,21 @@ public class PruebaAjedrez {
 
 
     public static char[][] codificar(int[][] posibilidades) {
-        char[][] codificado = new char[posibilidades.length][posibilidades[0].length];
+        char[][] codificado = new char[posibilidades.length][2]; // Siempre 2 columnas: letra y número
+
         for (int i = 0; i < posibilidades.length; i++) {
-            for (int j = 0; j < posibilidades[i].length; j++) {
-                if (j == 0) { //Se utiliza este if para saber si queremos codificar la primera columna o la segunda (La primera son letras la segunda son numeros)
-                    switch (posibilidades[i][j]) {
-                        case 1:
-                            codificado[i][j] = 'A';
-                            break;
-                        case 2:
-                            codificado[i][j] = 'B';
-                            break;
-                        case 3:
-                            codificado[i][j] = 'C';
-                            break;
-                        case 4:
-                            codificado[i][j] = 'D';
-                            break;
-                        case 5:
-                            codificado[i][j] = 'E';
-                            break;
-                        case 6:
-                            codificado[i][j] = 'F';
-                            break;
-                        case 7:
-                            codificado[i][j] = 'G';
-                            break;
-                        case 8:
-                            codificado[i][j] = 'H';
-                            break;
-                    }
-                } else {
-                    switch (posibilidades[i][j]) {
-                        case 1:
-                            codificado[i][j] = '8';
-                            break;
-                        case 2:
-                            codificado[i][j] = '7';
-                            break;
-                        case 3:
-                            codificado[i][j] = '6';
-                            break;
-                        case 4:
-                            codificado[i][j] = '5';
-                            break;
-                        case 5:
-                            codificado[i][j] = '4';
-                            break;
-                        case 6:
-                            codificado[i][j] = '3';
-                            break;
-                        case 7:
-                            codificado[i][j] = '2';
-                            break;
-                        case 8:
-                            codificado[i][j] = '1';
-                            break;
-                    }
-                }
-            }
+            int fila = posibilidades[i][0];
+            int columna = posibilidades[i][1];
+
+            codificado[i][0] = codificarFilaInt(fila); // Columna como letra
+            codificado[i][1] = codificarColumnaInt(columna);     // Fila como número
         }
         return codificado;
     }
 
-    public static char codificarColumna(int posJ) {
+
+
+    public static char codificarColumnaInt(int posJ) {
         char letra = ' ';
         switch (posJ) {
             case 1:
@@ -227,7 +189,7 @@ public class PruebaAjedrez {
         return letra;
     }
 
-    public static char codificarFila(int posI) {
+    public static char codificarFilaInt(int posI) {
         char numero = ' ';
         switch (posI) {
             case 1:
@@ -258,7 +220,7 @@ public class PruebaAjedrez {
         return numero;
     }
 
-    public static int codificarColumna(char letra) {
+    public static int codificarColumnaChar(char letra) {
         int posicion = 0;
         switch (letra) {
             case 'A':
@@ -289,7 +251,7 @@ public class PruebaAjedrez {
         return posicion;
     }
 
-    public static int codificarFila(char numero) {
+    public static int codificarFilaChar(char numero) {
         int posicion = 0;
         switch (numero) {
             case '1':

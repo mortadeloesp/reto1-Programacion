@@ -4,7 +4,7 @@ public class Ajedrez {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[48;5;15m";
     public static final String ANSI_BROWN_BACKGROUND = "\u001B[48;5;94m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-    public static final String ANSI_RED_BACKGROUND = "\u001B[101m";
+    public static final String ANSI_BLUE_BACKGROUND = "\033[48;2;0;0;139m";
     public static char[][] crearTablero() {
 
         char[][] tablero = new char [11][11];
@@ -35,7 +35,7 @@ public class Ajedrez {
         return tablero;
     }
 
-    public static void imprimirTablero (char[][] tablero){
+    public static void imprimirTablero (char[][] tablero, char tipo){
         int nfila = 2;
         for(int i = 0; i < tablero.length; i++){
             for(int j = 0; j < tablero[i].length; j++){
@@ -65,7 +65,7 @@ public class Ajedrez {
                     System.out.print(ANSI_GREEN_BACKGROUND + "\u200B" + "  " + ANSI_RESET);
                 }
                 else if(tablero[i][j]=='*'){
-                    System.out.print(ANSI_RED_BACKGROUND + "   " + ANSI_RESET);
+                    System.out.print(ANSI_BLUE_BACKGROUND + " " + tipo + " " + ANSI_RESET);
                 }
                 else{
                     System.out.print(" " + tablero[i][j] + " ");
@@ -86,6 +86,32 @@ public class Ajedrez {
             }
         }
     }
+
+    public static void imprimirMovimientos(char[][] codificado) {
+        System.out.print("Los posibles movimientos de la pieza introducida son: ");
+        System.out.print("[");
+        boolean primero = true; // Controla si es el primer par que imprimimos
+
+        for (int i = 0; i < codificado.length; i++) {
+            // Recoger los dos movimientos de cada fila
+            char movimiento1 = codificado[i][1]; // Columna j=1
+            char movimiento2 = codificado[i][0]; // Columna j=0
+
+            // Validar que al menos uno de los valores no sea un espacio vacío (' ')
+            if (movimiento1 != ' ' || movimiento2 != ' ') {
+                if (!primero) {
+                    System.out.print(", "); // Agrega coma solo entre pares válidos
+                }
+                System.out.print(movimiento1 + "" + movimiento2); // Concatenar los movimientos
+                primero = false; // Marcar que ya se imprimió el primer par
+            }
+        }
+        System.out.print("]");
+    }
+
+
+
+
 
 
 
