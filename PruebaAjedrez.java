@@ -3,9 +3,12 @@ import java.util.Scanner;
 
 public class PruebaAjedrez {
     public static void main(String[] args) {
-
+        boolean continuar;
+        //AQUI PON LAS COSAS BONITAS//
+        do {
         char[][] tablero = Ajedrez.crearTablero();
-        Pieza miPieza = introducirPieza();
+            Pieza miPieza = introducirPieza();
+
         int[][] prueba = new int[1][1];
         switch(miPieza.getTipo()){
             case 'R':
@@ -32,6 +35,10 @@ public class PruebaAjedrez {
         Ajedrez.modificarTablero(tablero, prueba, miPieza.getPosI(), miPieza.getPosJ());
         Ajedrez.imprimirTablero(tablero, miPieza.getTipo(), miPieza.isColor());
         Ajedrez.imprimirMovimientos(codificado);
+        //AQUI usa codificado en el metodo pasado por parametro y despues comparalos con == con el scan que hagas para meterlo en el setPos//
+
+        continuar = finaljuego();
+        }while(continuar);
     }
         /*Scanner scan = new Scanner(System.in);
         System.out.println("Introduce la pieza (Torre (T), Alfil (A), Peón (P), Dama (D), Caballo (C), Rey (R)): ");
@@ -140,6 +147,37 @@ public class PruebaAjedrez {
         } while (!filaValida);
 
         return nuevaPieza;
+    }
+
+    public static boolean finaljuego() {
+        Scanner scan = new Scanner(System.in);
+        boolean continuar = false;
+        boolean opcionValida = false;
+
+        System.out.println(" ");
+
+        do {
+            // Preguntar al usuario si quiere continuar o cambiar de pieza
+            System.out.println("¿Quieres continuar con el programa (S/N)?");
+            System.out.print("Selecciona una opción: ");
+            char opcion = scan.next().toUpperCase().charAt(0);
+
+            if (opcion == 'S') {
+                System.out.println("El programa continuará");
+                opcionValida = true;
+                continuar = true;
+
+            } else if (opcion == 'N') {
+                System.out.println("Gracias por jugar al Ajedrez Interactivo. ¡Hasta la próxima!");
+                opcionValida = true;
+            }
+            else{
+                System.out.println("Opción no valida");
+            }
+
+        }while(!opcionValida);
+
+        return continuar;
     }
 
 
