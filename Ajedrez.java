@@ -1,10 +1,11 @@
 public class Ajedrez {
     public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK_TEXT = "\033[30m";
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[48;5;15m";
     public static final String ANSI_BROWN_BACKGROUND = "\u001B[48;5;94m";
     public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-    public static final String ANSI_BLUE_BACKGROUND = "\033[48;2;0;0;139m";
+    public static final String ANSI_RED_BACKGROUND = "\033[41m";
     public static char[][] crearTablero() {
 
         char[][] tablero = new char [11][11];
@@ -35,7 +36,7 @@ public class Ajedrez {
         return tablero;
     }
 
-    public static void imprimirTablero (char[][] tablero, char tipo){
+    public static void imprimirTablero (char[][] tablero, char tipo, boolean color){
         int nfila = 2;
         for(int i = 0; i < tablero.length; i++){
             for(int j = 0; j < tablero[i].length; j++){
@@ -64,8 +65,11 @@ public class Ajedrez {
                 else if(tablero[i][j]=='-'){
                     System.out.print(ANSI_GREEN_BACKGROUND + "\u200B" + "  " + ANSI_RESET);
                 }
-                else if(tablero[i][j]=='*'){
-                    System.out.print(ANSI_BLUE_BACKGROUND + " " + tipo + " " + ANSI_RESET);
+                else if(tablero[i][j]=='*' && color){
+                    System.out.print(ANSI_RED_BACKGROUND + ANSI_BLACK_TEXT + " " + tipo + " " + ANSI_RESET);
+                }
+                else if(tablero[i][j]=='*' && !color){
+                    System.out.print(ANSI_RED_BACKGROUND + " " + tipo + " " + ANSI_RESET);
                 }
                 else{
                     System.out.print(" " + tablero[i][j] + " ");

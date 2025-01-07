@@ -30,7 +30,7 @@ public class PruebaAjedrez {
         char[][] codificado = codificar(prueba);
         System.out.println("Tu pieza está en la posición " + codificarColumnaInt(miPieza.getPosJ()) + codificarFilaInt(miPieza.getPosI()));
         Ajedrez.modificarTablero(tablero, prueba, miPieza.getPosI(), miPieza.getPosJ());
-        Ajedrez.imprimirTablero(tablero, miPieza.getTipo());
+        Ajedrez.imprimirTablero(tablero, miPieza.getTipo(), miPieza.isColor());
         Ajedrez.imprimirMovimientos(codificado);
     }
         /*Scanner scan = new Scanner(System.in);
