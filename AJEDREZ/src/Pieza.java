@@ -147,11 +147,16 @@ public class Pieza {
             if (this.posI == 7) {  // Si el peón está en la fila 7, puede moverse 1 o 2 casillas hacia adelante
                 movimientosFila = new int[]{-1, -2};  // Movimiento hacia arriba
                 movimientosColumna = new int[]{0, 0};  // La columna no cambia
+            } else if (this.posI == 8) {
+                movimientosFila = new int[]{0, 0};  // Movimiento hacia arriba
+                movimientosColumna = new int[]{0, 0};
+
             } else {  // Si no está en la fila 7, solo puede moverse 1 casilla hacia adelante
-                movimientosFila = new int[]{-1};
-                movimientosColumna = new int[]{0};
+            movimientosFila = new int[]{-1};
+            movimientosColumna = new int[]{0};
             }
         }
+
         // Movimiento para el peón blanco
         else {  // Peón blanco
             if (this.posI == 2) {  // Si el peón está en la fila 2, puede moverse 1 o 2 casillas hacia adelante
@@ -183,6 +188,5 @@ public class Pieza {
 
         return comprobarPosicion(movimientosFila, movimientosColumna, posibilidades);
     }
-
 
 }

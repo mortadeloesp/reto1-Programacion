@@ -85,19 +85,20 @@ public class PruebaAjedrez {
         //https://symbl.cc/es/collections/chess-symbols/
         // Tipo
         do {
-            System.out.println("Elige: Torre (T)♖♜, Alfil (A)♗♝, Peón (P)♙♟ \u265F \u2659, Dama (D)♕♛, Caballo (C)♘♞, Rey (R)♔♚: |\uD83D\uDE7E\uD83D\uDE7F|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|");
+            System.out.println("Elige: Torre (T)♖♜, Alfil (A)♗♝, Peón (P)♟♙, Dama (D)♕♛, Caballo (C)♘♞, Rey (R)♔♚: ");
+            //System.out.println("|\uD83D\uDE7E\uD83D\uDE7F|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|");
 
             String nombrePieza = scan.next();
 
             if (nombrePieza.length() != 1) { // Comprobamos que solamente se ha introducido una letra
-                System.out.println("Longitud errónea");
+                System.out.println("Longitud errónea, solo una letra");
             } else {
                 char tipo = Character.toUpperCase(nombrePieza.charAt(0));
                 if (tipo == 'T' || tipo == 'P' || tipo == 'A' || tipo == 'D' || tipo == 'R' || tipo == 'C') {
                     nuevaPieza.setTipo(tipo);
                     tipoValido = true;
                 } else {
-                    System.out.println("Tipo no válido, vuelva a intentarlo.");
+                    System.out.println("Tipo no válido, vuelva a intentarlo");
                 }
             }
         } while (!tipoValido);
@@ -118,10 +119,10 @@ public class PruebaAjedrez {
                     nuevaPieza.setColor(true);
                     colorValido = true;
                 } else {
-                    throw new Exception("Error, valor no considerado (Introduce 1 o 0)");
+                    throw new Exception("Error, introduce 0 o 1");
                 }
             } catch (InputMismatchException noBoolean) {
-                System.out.println("Introduce un valor numérico (1 o 0)");
+                System.out.println("Introduce un valor numérico (0 o 1)");
                 scan.nextLine();
             } catch (Exception noConsiderado) {
                 System.out.println(noConsiderado.getMessage());
@@ -157,7 +158,7 @@ public class PruebaAjedrez {
 
             String numeroFila = scan.next();
             if (numeroFila.length() != 1) {
-                System.out.println("Longitud errónea");
+                System.out.println("Longitud errónea, solo un número");
             } else {
                 char fila = numeroFila.charAt(0);
                 int filaNumerica = codificarFilaChar(fila);
