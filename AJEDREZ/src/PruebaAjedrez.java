@@ -1,13 +1,59 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static javax.swing.text.html.HTML.Tag.U;
-
 public class PruebaAjedrez {
     public static void main(String[] args) {
+        boolean mover;
+        boolean seguirMoviendo = false;
         boolean continuar;
         //AQUI PON LAS COSAS BONITAS//
+        imprimirMenu();
+        do {
+            Pieza miPieza = introducirPieza();
+            do{
+                char[][] tablero = Ajedrez.crearTablero();
+                int[][] prueba = new int[1][1];
+                switch(miPieza.getTipo()){
+                    case 'R':
+                        prueba = miPieza.movimientoRey();
+                        break;
+                    case 'A':
+                        prueba = miPieza.movimientoAlfil();
+                        break;
+                    case 'T':
+                        prueba = miPieza.movimientoTorre();
+                        break;
+                    case 'P':
+                        prueba = miPieza.movimientoPeon();
+                        break;
+                    case 'D':
+                        prueba = miPieza.movimientoDama();
+                        break;
+                    case 'C':
+                        prueba = miPieza.movimientoCaballo();
+                        break;
+                }
 
+                char[][] codificado = codificar(prueba);
+                System.out.println("Tu pieza está en la posición " + codificarColumnaInt(miPieza.getPosJ()) + codificarFilaInt(miPieza.getPosI()));
+                Ajedrez.modificarTablero(tablero, prueba, miPieza.getPosI(), miPieza.getPosJ());
+                Ajedrez.imprimirTablero(tablero, miPieza.getTipo(), miPieza.isColor());
+                System.out.print("Los posibles movimientos son: ");
+                Ajedrez.imprimirMovimientos(codificado);
+                mover = nuevaposicion();
+                if (mover) {
+                    modificarPosicion(miPieza, codificado);
+                    seguirMoviendo = true;
+                }
+                else{
+                    seguirMoviendo = false;
+                }
+            }while(seguirMoviendo);
+            continuar = finaljuego();
+        }while(continuar);
+    }
+
+    public static void imprimirMenu() {
         System.out.println("*********************************************************");
         System.out.println("*                                                       *");
         System.out.println("*          ♔ AJEDREZ; LA REINA Y SUS PEONES ♔          *");
@@ -21,11 +67,11 @@ public class PruebaAjedrez {
         System.out.println("|  - Define el color (Blanco o Negro)                             |");
         System.out.println("|  - Establece la posición inicial en el tablero                  |");
         System.out.println("|                                                                 |");
-        System.out.println("|  \033 La casilla de tu pieza se iluminará en ROJO                  |");
-        System.out.println("|  \u001B Las casillas a las que puede moverse serán VERDES            |");
+        System.out.println("|    La casilla de tu pieza se iluminará en \u001B[31mROJO\u001B[0m                  |");
+        System.out.println("|    Las casillas a las que puede moverse serán \u001B[32mVERDES\u001B[0m            |");
         System.out.println("|                                                                 |");
         System.out.println("|  - Los posibles movimientos aparecerán                          |");
-        System.out.println("|    debajo del tablero en formato (e.g., a1, c4, etc.)           |");
+        System.out.println("|    debajo del tablero en formato (A1, C4, D5, etc.)             |");
         System.out.println("|                                                                 |");
         System.out.println("|-----------------------------------------------------------------|");
         System.out.println();
@@ -33,45 +79,7 @@ public class PruebaAjedrez {
         System.out.println("*           ¡Esperamos que disfrutes reina!          *");
         System.out.println("******************************************************");
         System.out.println();
-
-
-        do {
-            char[][] tablero = Ajedrez.crearTablero();
-            Pieza miPieza = introducirPieza();
-
-            int[][] prueba = new int[1][1];
-            switch(miPieza.getTipo()){
-                case 'R':
-                    prueba = miPieza.movimientoRey();
-                    break;
-                case 'A':
-                    prueba = miPieza.movimientoAlfil();
-                    break;
-                case 'T':
-                    prueba = miPieza.movimientoTorre();
-                    break;
-                case 'P':
-                    prueba = miPieza.movimientoPeon();
-                    break;
-                case 'D':
-                    prueba = miPieza.movimientoDama();
-                    break;
-                case 'C':
-                    prueba = miPieza.movimientoCaballo();
-                    break;
-            }
-
-            char[][] codificado = codificar(prueba);
-            System.out.println("Tu pieza está en la posición " + codificarColumnaInt(miPieza.getPosJ()) + codificarFilaInt(miPieza.getPosI()));
-            Ajedrez.modificarTablero(tablero, prueba, miPieza.getPosI(), miPieza.getPosJ());
-            Ajedrez.imprimirTablero(tablero, miPieza.getTipo(), miPieza.isColor());
-            Ajedrez.imprimirMovimientos(codificado);
-            //AQUI usa codificado en el metodo pasado por parametro y despues comparalos con == con el scan que hagas para meterlo en el setPos//
-
-            continuar = finaljuego();
-        } while(continuar);
     }
-
 
     public static Pieza introducirPieza() {
         Scanner scan = new Scanner(System.in);
@@ -81,24 +89,26 @@ public class PruebaAjedrez {
         boolean filaValida = false;
         boolean columnaValida = false;
 
-
-        //https://symbl.cc/es/collections/chess-symbols/
         // Tipo
         do {
-            System.out.println("Elige: Torre (T)♖♜, Alfil (A)♗♝, Peón (P)♟♙, Dama (D)♕♛, Caballo (C)♘♞, Rey (R)♔♚: ");
-            //System.out.println("|\uD83D\uDE7E\uD83D\uDE7F|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|\n|\uD83D\uDE7E\uD83D\uDE7E|");
+            System.out.println("Elige: Torre (T)♖♜, Alfil (A)♗♝, Peón (P)♙♟, Dama (D)♕♛, Caballo (C)♘♞, Rey (R)♔♚: ");
+            // ♟ ♙
+            // |🙾🙿|
+            //|🙾🙾|
+            //|🙾🙾|
+            //|🙾🙾|
 
             String nombrePieza = scan.next();
 
             if (nombrePieza.length() != 1) { // Comprobamos que solamente se ha introducido una letra
-                System.out.println("Longitud errónea, solo una letra");
+                System.out.println("Longitud errónea");
             } else {
                 char tipo = Character.toUpperCase(nombrePieza.charAt(0));
                 if (tipo == 'T' || tipo == 'P' || tipo == 'A' || tipo == 'D' || tipo == 'R' || tipo == 'C') {
                     nuevaPieza.setTipo(tipo);
                     tipoValido = true;
                 } else {
-                    System.out.println("Tipo no válido, vuelva a intentarlo");
+                    System.out.println("Tipo de pieza no válido, vuelve a intentarlo");
                 }
             }
         } while (!tipoValido);
@@ -119,7 +129,7 @@ public class PruebaAjedrez {
                     nuevaPieza.setColor(true);
                     colorValido = true;
                 } else {
-                    throw new Exception("Error, introduce 0 o 1");
+                    throw new Exception("Valor no considerado, introduce 0 o 1)");
                 }
             } catch (InputMismatchException noBoolean) {
                 System.out.println("Introduce un valor numérico (0 o 1)");
@@ -137,7 +147,7 @@ public class PruebaAjedrez {
 
             String letraColumna = scan.next();
             if (letraColumna.length() != 1) {
-                System.out.println("Longitud errónea");
+                System.out.println("Dato incorrecto, introduce una letra válida");
             }
             else {
                 char columna = Character.toUpperCase(letraColumna.charAt(0));
@@ -146,7 +156,7 @@ public class PruebaAjedrez {
                     nuevaPieza.setPosJ(columnaNumerica);
                     columnaValida = true;
                 } else {
-                    System.out.println("Error, dato incorrecto");
+                    System.out.println("Dato incorrecto, introduce una letra válida");
                 }
             }
         }while (!columnaValida);
@@ -158,21 +168,22 @@ public class PruebaAjedrez {
 
             String numeroFila = scan.next();
             if (numeroFila.length() != 1) {
-                System.out.println("Longitud errónea, solo un número");
+                System.out.println("Dato incorrecto, introduce un número válido");
+
             } else {
                 char fila = numeroFila.charAt(0);
                 int filaNumerica = codificarFilaChar(fila);
                 if (nuevaPieza.getTipo()=='P' && nuevaPieza.isColor() && filaNumerica == 1){
                     System.out.println("Posición errónea");
                 }
-                if (nuevaPieza.getTipo()=='P' && !nuevaPieza.isColor() && filaNumerica == 8){
+                else if (nuevaPieza.getTipo()=='P' && !nuevaPieza.isColor() && filaNumerica == 8){
                     System.out.println("Posición errónea");
                 }
                 else if (filaNumerica >= 1 && filaNumerica <= 8) {
                     nuevaPieza.setPosI(filaNumerica);
                     filaValida = true;
                 } else {
-                    System.out.println("Error, dato incorrecto");
+                    System.out.println("Dato incorrecto, introduce un número válido");
                 }
             }
         } while (!filaValida);
@@ -180,17 +191,80 @@ public class PruebaAjedrez {
         return nuevaPieza;
     }
 
+    public static boolean nuevaposicion() {
+        Scanner scan = new Scanner(System.in);
+        char opcion;
+        boolean nueva = false;
+        boolean opcionValida = false;
+
+        System.out.println(" ");
+
+        do{
+            System.out.println("¿Quieres seguir moviendo esta pieza? (S/N)");
+            opcion = scan.next().toUpperCase().charAt(0);
+
+            if(opcion!='S' && opcion!='N'){
+                System.out.println("Opción no valida");
+            }
+            else{
+                if(opcion == 'S'){
+                    nueva = true;
+                    opcionValida = true;
+                }
+                if(opcion == 'N'){
+                    nueva = false;
+                    opcionValida = true;
+                }
+            }
+
+
+        }while(!opcionValida);
+
+        return nueva;
+    }
+
+    public static Pieza modificarPosicion(Pieza nuevaPieza, char[][] codificado) {
+        Scanner scan = new Scanner(System.in);
+        boolean posicionValida = false;
+        char columna = ' ';
+        char fila = ' ';
+
+        do {
+            System.out.println("|-----------------------------------------------------------------|");
+            System.out.print("Introduce la columna (letra de la A a la H): ");
+            columna = Character.toUpperCase(scan.next().charAt(0));
+
+            System.out.print("Introduce la fila (número del 1 al 8): ");
+            fila = scan.next().charAt(0);
+
+            for (char[] posicion : codificado) {
+                if (posicion[0] == fila && posicion[1] == columna) {
+                    nuevaPieza.setPosJ(codificarColumnaChar(columna)); // Actualizar columna en la pieza
+                    nuevaPieza.setPosI(codificarFilaChar(fila)); // Actualizar fila en la pieza
+                    posicionValida = true;
+                    break;
+                }
+            }
+
+            if (!posicionValida) {
+                System.out.println("La posición introducida no es válida, elige una de la lista");
+            }
+        } while (!posicionValida);
+
+        System.out.println("|-----------------------------------------------------------------|");
+        return nuevaPieza;
+    }
+
+
     public static boolean finaljuego() {
         Scanner scan = new Scanner(System.in);
         boolean continuar = false;
         boolean opcionValida = false;
 
-        System.out.println(" ");
-
         do {
             // Preguntar al usuario si quiere continuar o cambiar de pieza
-            System.out.println("¿Quieres continuar con el programa (S/N)?");
-            System.out.print("Selecciona una opción: ");
+            System.out.println("¿Quieres introducir una ficha nueva? (S/N)");
+            System.out.println("Si eliges 'N' se terminará el programa");
             char opcion = scan.next().toUpperCase().charAt(0);
 
             if (opcion == 'S') {
@@ -202,11 +276,10 @@ public class PruebaAjedrez {
                 System.out.println("******************************************************");
                 System.out.println("*              ¡Gracias por jugar, reina!            *");
                 System.out.println("******************************************************");
-
                 opcionValida = true;
             }
             else{
-                System.out.println("Opción no valida");
+                System.out.println("Opción no valida, vuelve a intentarlo");
             }
 
         }while(!opcionValida);
