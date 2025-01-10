@@ -1,5 +1,6 @@
 public class Ajedrez {
     public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_WHITE_TEXT = "\u001B[1;97m";
     public static final String ANSI_BLACK_TEXT = "\033[30m";
     public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[48;5;15m";
@@ -69,7 +70,7 @@ public class Ajedrez {
                     System.out.print(ANSI_RED_BACKGROUND + ANSI_BLACK_TEXT + " " + tipo + " " + ANSI_RESET);
                 }
                 else if(tablero[i][j]=='*' && !color){
-                    System.out.print(ANSI_RED_BACKGROUND + " " + tipo + " " + ANSI_RESET);
+                    System.out.print(ANSI_RED_BACKGROUND + ANSI_WHITE_TEXT + " " + tipo + " " + ANSI_RESET);
                 }
                 else{
                     System.out.print(" " + tablero[i][j] + " ");
