@@ -164,7 +164,6 @@ public class PruebaAjedrez {
 
         // Fila
         do{
-            System.out.println("|-----------------------------------------------------------------|");
             System.out.print("Fila (número del 1 al 8): ");
 
             String numeroFila = scan.next();
@@ -188,7 +187,7 @@ public class PruebaAjedrez {
                 }
             }
         } while (!filaValida);
-
+        System.out.println("|-----------------------------------------------------------------|");
         return nuevaPieza;
     }
 
