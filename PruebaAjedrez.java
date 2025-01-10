@@ -4,12 +4,12 @@ import java.util.Scanner;
 public class PruebaAjedrez {
     public static void main(String[] args) {
         boolean mover;
-        boolean seguirMoviendo = false;
+        boolean seguirMoviendo;
         boolean continuar;
-        //AQUI PON LAS COSAS BONITAS//
         imprimirMenu();
         do {
             Pieza miPieza = introducirPieza();
+            comprobarPeon(miPieza);
             do{
                 char[][] tablero = Ajedrez.crearTablero();
                 int[][] prueba = new int[1][1];

@@ -4,25 +4,6 @@ public class Pieza {
     private int posI;
     private int posJ;
 
-    public Pieza(char tipo, boolean color, int posI, int posJ) { //Hacer try catch en el main, usar UPPERCASE para hacerla mayuscula
-        if (tipo == 'T' || tipo == 'P' || tipo == 'A' || tipo == 'D' || tipo == 'R' || tipo == 'C') {
-            this.tipo = tipo;
-        } else {
-            System.out.println("Tipo de pieza no válido");
-        }
-        this.color = color; //0 blanco, 1 negro
-        if (posI > 0 && posI < 9) {
-            this.posI = posI;
-        } else {
-            System.out.println("Posición de fila incorrecta");
-        }
-        if (posJ > 0 && posJ < 9) {
-            this.posJ = posJ;
-        } else {
-            System.out.println("Posición de columna incorrecta");
-        }
-    }
-
     public Pieza(){
         this.tipo=' ';
         this.color=false;
