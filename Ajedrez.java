@@ -92,7 +92,6 @@ public class Ajedrez {
     }
 
     public static void imprimirMovimientos(char[][] codificado) {
-        System.out.print("Los posibles movimientos de la pieza introducida son: ");
         System.out.print("[");
         boolean primero = true; // Controla si es el primer par que imprimimos
 
@@ -112,11 +111,5 @@ public class Ajedrez {
         }
         System.out.print("]");
     }
-
-
-
-
-
-
 
 }
